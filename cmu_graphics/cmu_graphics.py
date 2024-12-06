@@ -323,12 +323,10 @@ class Group(Shape):
 
 
 class Sound(object):
-    number_of_sounds = 0
-
     def __init__(self, url):
         if not pygame.mixer.get_init():
             pygame.mixer.init()
-            pygame.mixer.set_num_channels(1)
+            pygame.mixer.set_num_channels(16)
 
         if not isinstance(url, str):
             callSpec = '{className}.{attr}'.format(className=t('Sound'), attr=t('url'))
@@ -344,12 +342,8 @@ class Sound(object):
             )
             raise Exception(err)
 
-        Sound.number_of_sounds += 1
-        if pygame.mixer.get_num_channels() == Sound.number_of_sounds:
-            pygame.mixer.set_num_channels(Sound.number_of_sounds * 2)
-
         if url.startswith('file://'):
-            url = url.split('//')[-1]
+            url = url[len('file://') :]
 
         if url.startswith('http'):
             try:
